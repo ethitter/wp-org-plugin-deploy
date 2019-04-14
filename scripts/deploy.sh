@@ -8,7 +8,7 @@ set -eo
 
 # Provide a basic version identifier, particularly since this script
 # is usually accessed via CDN.
-echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2019041402"
+echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2019041403"
 
 if [[ -z "$CI" ]]; then
 	echo "𝘅︎ Script is only to be run by GitLab CI" 1>&2
@@ -41,6 +41,12 @@ fi
 
 if [[ -z "$WP_ORG_ASSETS_DIR" ]]; then
 	WP_ORG_ASSETS_DIR=".wordpress-org"
+fi
+
+# Create empty static-assets directory if needed, triggering
+# removal of any stray assets in svn.
+if [[ ! -d "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/" ]]; then
+    mkdir -p "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/"
 fi
 
 echo "ℹ︎ PLUGIN_SLUG: ${PLUGIN_SLUG}"
