@@ -4,6 +4,9 @@ Deploy plugin updates to WordPress.org's plugin SVN. Modeled on [10up's GitHub a
 
 ## Configuration
 
+1. Add the `.gitlab-ci.yml` configuration described below.
+1. Set the environment variables in the GitLab project.
+
 ### `.gitlab-ci.yml`
 
 Add the following to the plugin's `.gitlab-ci.yml`:
@@ -15,6 +18,8 @@ PluginSVN:
   before_script:
     - apt-get update
     - apt-get install -y rsync
+    - curl -o ./bin/deploy.sh https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh
+    - chmod +x ./bin/deploy.sh
   script: ./bin/deploy.sh
   when: on_success
 ```
@@ -37,3 +42,7 @@ Set the following environment variables in the GitLab project's configuration:
 * `PLUGIN_SLUG` - plugin's name on WordPress.org
 * `PLUGIN_VERSION` - version to tag
 * `WP_ORG_RELEASE_REF` - commit ref (branch or tag) to use for release 
+
+### Alternatives
+
+A [loader script](./scripts/loader.sh) is available as an alternative to downloading the deploy script during the `before_script` stage.
