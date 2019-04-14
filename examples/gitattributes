@@ -5,6 +5,7 @@
 /.gitignore export-ignore
 /.gitlab-ci.yml export-ignore
 /.travis.yml export-ignore
+/.wordpress-org export-ignore
 /.DS_Store export-ignore
 /Thumbs.db export-ignore
 /behat.yml export-ignore
