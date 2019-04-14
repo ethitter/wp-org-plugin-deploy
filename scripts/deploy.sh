@@ -97,7 +97,7 @@ svn status
 
 # Stop here unless this is a merge into master.
 if [[ -z "$CI_COMMIT_REF_NAME" || -z "$WP_ORG_RELEASE_REF" || "$CI_COMMIT_REF_NAME" != "$WP_ORG_RELEASE_REF" ]]; then
-	echo "𝘅︎ EXITING before commit step as this is the '${CI_COMMIT_REF_NAME}' ref, not the '${WP_ORG_RELEASE_TAG}' ref." 1>&2
+	echo "𝘅︎ EXITING before commit step as this is the '${CI_COMMIT_REF_NAME}' ref, not the '${WP_ORG_RELEASE_REF}' ref." 1>&2
 	exit 0
 fi
 
