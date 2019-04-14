@@ -46,3 +46,14 @@ Set the following environment variables in the GitLab project's configuration:
 ### Alternatives
 
 A [loader script](./scripts/loader.sh) is available as an alternative to downloading the deploy script during the `before_script` stage.
+
+## Ignoring items
+
+The build script uses a `.gitattributes`-based ignore for reasons discussed at [https://github.com/10up/actions-wordpress/pull/7](https://github.com/10up/actions-wordpress/pull/7).
+
+A sample is provided in [examples/gitattributes](./examples/gitattributes). If used, it needs to be copied to `.gitattributes` in the git-repo root and committed before it will be respected.
+
+```
+# A set of files you probably don't want in your WordPress.org distribution
+/.gitattributes export-ignore
+```
