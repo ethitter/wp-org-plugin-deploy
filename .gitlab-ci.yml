@@ -1,0 +1,7 @@
+lint:shell-scripts:
+  stage: test
+  image: koalaman/shellcheck-alpine:latest
+  before_script:
+    - shellcheck -V
+  script:
+    - find scripts -name "*.sh" -exec shellcheck {} \;
