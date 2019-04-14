@@ -43,12 +43,12 @@ SVN_URL="https://plugins.svn.wordpress.org/${PLUGIN_SLUG}/"
 SVN_DIR="$CI_BUILDS_DIR/svn-${PLUGIN_SLUG}"
 TMP_DIR="$CI_BUILDS_DIR/git-archive"
 
-# Checkout just trunk for efficiency
-# Tagging will be handled on the SVN level
-echo "➤ Checking out .org repository..."
+# Limit checkouts for efficiency
+echo "➤ Checking out dotorg repository..."
 svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
 cd "$SVN_DIR"
 svn update --set-depth infinity trunk
+svn update --set-depth infinity "tags/${PLUGIN_VERSION}"
 
 # Ensure we are in the $CI_PROJECT_DIR directory, just in case
 echo "➤ Copying files..."
