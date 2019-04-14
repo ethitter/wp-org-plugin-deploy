@@ -37,11 +37,11 @@ The above is a time-save only; the build script exits before the `svn commit` st
 
 Set the following environment variables in the GitLab project's configuration:
 
-* `WP_ORG_PASSWORD`
+* `WP_ORG_USERNAME`
 * `WP_ORG_PASSWORD`
 * `PLUGIN_SLUG` - plugin's name on WordPress.org
 * `PLUGIN_VERSION` - version to tag
-* `WP_ORG_RELEASE_REF` - commit ref (branch or tag) to use for release 
+* `WP_ORG_RELEASE_REF` - git commit ref (branch or tag) to use for release 
 
 ### Alternatives
 
