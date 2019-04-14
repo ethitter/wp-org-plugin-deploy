@@ -35,8 +35,9 @@ if [[ -z "$PLUGIN_VERSION" ]]; then
 	exit 1
 fi
 
-echo "ℹ︎ PLUGIN_SLUG is $PLUGIN_SLUG"
-echo "ℹ︎ PLUGIN_VERSION is $PLUGIN_VERSION"
+echo "ℹ︎ PLUGIN_SLUG: $PLUGIN_SLUG"
+echo "ℹ︎ PLUGIN_VERSION: $PLUGIN_VERSION"
+echo "ℹ︎ WP_ORG_RELEASE_REF: $WP_ORG_RELEASE_REF"
 
 SVN_URL="https://plugins.svn.wordpress.org/${PLUGIN_SLUG}/"
 SVN_DIR="$CI_BUILDS_DIR/svn-${PLUGIN_SLUG}"
