@@ -16,8 +16,6 @@ PluginSVN:
   stage: deploy
   image: containers.ethitter.com:443/docker/images/php:7.3
   before_script:
-    - apt-get update
-    - apt-get install -y rsync
     - curl -o ./bin/deploy.sh https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh
     - chmod +x ./bin/deploy.sh
   script: ./bin/deploy.sh
@@ -57,3 +55,7 @@ A sample is provided in [examples/gitattributes](./examples/gitattributes). If u
 # A set of files you probably don't want in your WordPress.org distribution
 /.gitattributes export-ignore
 ```
+
+## Protecting deploys
+
+Choose a `WP_ORG_RELEASE_REF` value that starts with a consistent prefix. Doing so allows that prefix to be protected using GitLab's "Protected Branches" or "Protected Tags" features.
