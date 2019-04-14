@@ -1,4 +1,4 @@
-# WP.org Plugin Deploy
+# WP.org Plugin Deploy [![pipeline status](https://git.ethitter.com/open-source/wp-org-plugin-deploy/badges/master/pipeline.svg)](https://git.ethitter.com/open-source/wp-org-plugin-deploy/commits/master)
 
 Deploy plugin updates to WordPress.org's plugin SVN. Modeled on [10up's GitHub action](https://github.com/10up/actions-wordpress/blob/598b1572d5024340f09d7efc083a65ebff3bcdef/dotorg-plugin-deploy/entrypoint.sh) of the same intent.
 
