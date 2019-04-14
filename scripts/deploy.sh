@@ -92,13 +92,6 @@ cd "$SVN_DIR"
 # The --delete flag will delete anything in destination that no longer exists in source
 rsync -r "$TMP_DIR/" trunk/ --delete
 
-# If tag already exists, update from trunk.
-# Generally, this applies when bumping WP version compatibility.
-if [[ -d "$SVN_TAG_DIR" ]]; then
-    echo "➤ Updating existing tag..."
-    rsync -r trunk/ "$SVN_TAG_DIR" --delete
-fi
-
 # Copy dotorg assets to /assets
 rsync -r "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/" assets/ --delete
 
@@ -112,7 +105,15 @@ svn add . --force > /dev/null
 # Also suppress stdout here
 svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm % > /dev/null
 
-# Copy new tag locally to make this a single commit
+# If tag already exists, remove and update from trunk.
+# Generally, this applies when bumping WP version compatibility.
+# svn doesn't have a proper rename function, prompting the remove/copy dance.
+if [[ -d "$SVN_TAG_DIR" ]]; then
+    echo "➤ Removing existing tag before update..."
+    svn rm "$SVN_TAG_DIR"
+fi
+
+# Copy new/updated tag to maintain svn history.
 if [[ ! -d "$SVN_TAG_DIR" ]]; then
     echo "➤ Copying tag..."
     svn cp "trunk" "$SVN_TAG_DIR"
