@@ -14,7 +14,7 @@ Add the following to the plugin's `.gitlab-ci.yml`:
 ```yaml
 PluginSVN:
   stage: deploy
-  image: containers.ethitter.com:443/docker/images/php:7.3
+  image: containers.ethitter.com:443/docker/wp-org-plugin-deploy:latest
   before_script:
     - curl -o ./bin/deploy.sh https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh
     - chmod +x ./bin/deploy.sh
@@ -30,6 +30,15 @@ only:
 ```
 
 The above is a time-save only; the build script exits before the `svn commit` stage if the merge isn't into `master`. 
+
+#### Script Dependencies
+
+If you'd rather not use [my Docker image](https://git.ethitter.com/docker/wp-org-plugin-deploy), any substitute must provide the following dependencies:
+
+1. `bash`
+1. `git`
+1. `rsync`
+1. `subversion`
 
 ### CI Environment Variables
 
