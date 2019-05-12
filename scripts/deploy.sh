@@ -6,9 +6,17 @@
 # it does not exit with a 0, and I only care about the final exit.
 set -eo
 
+# Common cleanup actions.
+function cleanup() {
+	echo "ℹ︎ Cleaning up..."
+
+	rm -rf "$SVN_DIR"
+	rm -rf "$TMP_DIR"
+}
+
 # Provide a basic version identifier, particularly since this script
 # is usually accessed via CDN.
-echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2019041403"
+echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2019051201"
 
 if [[ -z "$CI" ]]; then
 	echo "𝘅︎ Script is only to be run by GitLab CI" 1>&2
@@ -46,7 +54,7 @@ fi
 # Create empty static-assets directory if needed, triggering
 # removal of any stray assets in svn.
 if [[ ! -d "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/" ]]; then
-    mkdir -p "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/"
+	mkdir -p "${CI_PROJECT_DIR}/${WP_ORG_ASSETS_DIR}/"
 fi
 
 echo "ℹ︎ PLUGIN_SLUG: ${PLUGIN_SLUG}"
@@ -54,10 +62,11 @@ echo "ℹ︎ PLUGIN_VERSION: ${PLUGIN_VERSION}"
 echo "ℹ︎ WP_ORG_RELEASE_REF: ${WP_ORG_RELEASE_REF}"
 echo "ℹ︎ WP_ORG_ASSETS_DIR: ${WP_ORG_ASSETS_DIR}"
 
+TIMESTAMP=$(date +"%s")
 SVN_URL="https://plugins.svn.wordpress.org/${PLUGIN_SLUG}/"
-SVN_DIR="${CI_BUILDS_DIR}/svn-${PLUGIN_SLUG}"
+SVN_DIR="${CI_BUILDS_DIR}/svn/${PLUGIN_SLUG}-${TIMESTAMP}"
 SVN_TAG_DIR="${SVN_DIR}/tags/${PLUGIN_VERSION}"
-TMP_DIR="${CI_BUILDS_DIR}/git-archive"
+TMP_DIR="${CI_BUILDS_DIR}/git-archive/${PLUGIN_SLUG}-${TIMESTAMP}"
 
 # Limit checkouts for efficiency
 echo "➤ Checking out dotorg repository..."
@@ -89,7 +98,7 @@ if [[ ! -e "${CI_PROJECT_DIR}/.gitattributes" ]]; then
 fi
 
 # This will exclude everything in the .gitattributes file with the export-ignore flag
-mkdir "$TMP_DIR"
+mkdir -p "$TMP_DIR"
 git archive HEAD | tar x --directory="$TMP_DIR"
 
 cd "$SVN_DIR"
@@ -115,14 +124,14 @@ svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm % > /dev/null
 # Generally, this applies when bumping WP version compatibility.
 # svn doesn't have a proper rename function, prompting the remove/copy dance.
 if [[ -d "$SVN_TAG_DIR" ]]; then
-    echo "➤ Removing existing tag before update..."
-    svn rm "$SVN_TAG_DIR"
+	echo "➤ Removing existing tag before update..."
+	svn rm "$SVN_TAG_DIR"
 fi
 
 # Copy new/updated tag to maintain svn history.
 if [[ ! -d "$SVN_TAG_DIR" ]]; then
-    echo "➤ Copying tag..."
-    svn cp "trunk" "$SVN_TAG_DIR"
+	echo "➤ Copying tag..."
+	svn cp "trunk" "$SVN_TAG_DIR"
 fi
 
 svn status
@@ -130,10 +139,14 @@ svn status
 # Stop here unless this is a merge into master.
 if [[ -z "$CI_COMMIT_REF_NAME" || -z "$WP_ORG_RELEASE_REF" || "$CI_COMMIT_REF_NAME" != "$WP_ORG_RELEASE_REF" ]]; then
 	echo "𝘅︎ EXITING before commit step as this is the '${CI_COMMIT_REF_NAME}' ref, not the '${WP_ORG_RELEASE_REF}' ref." 1>&2
+
+	cleanup
 	exit 0
 fi
 
 echo "➤ Committing files..."
 svn commit -m "Update to version ${PLUGIN_VERSION} from GitLab (${CI_PROJECT_URL}; ${CI_JOB_URL})" --no-auth-cache --non-interactive  --username "$WP_ORG_USERNAME" --password "$WP_ORG_PASSWORD"
+
+cleanup
 
 echo "✓ Plugin deployed!"
