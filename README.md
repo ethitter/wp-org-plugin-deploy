@@ -50,6 +50,7 @@ Set the following environment variables in the GitLab project's configuration:
 * `PLUGIN_VERSION` - version to tag
 * `WP_ORG_RELEASE_REF` - git commit ref (branch or tag) to use for release 
 * `WP_ORG_ASSETS_DIR` - directory name, relative to repo root, where screenshots and other static assets are held
+* `WP_ORG_DEPLOY_SKIP` - set to `1` to skip the deploy without failing the job
 
 ### Alternate loading method
 

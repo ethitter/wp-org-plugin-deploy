@@ -16,11 +16,17 @@ function cleanup() {
 
 # Provide a basic version identifier, particularly since this script
 # is usually accessed via CDN.
-echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2019051201"
+echo "ℹ︎ WP-ORG-PLUGIN-DEPLOY VERSION: 2022070901"
 
 if [[ -z "$CI" ]]; then
 	echo "𝘅︎ Script is only to be run by GitLab CI" 1>&2
 	exit 1
+fi
+
+# Allow deploy to be skipped if desired.
+if [[ "1" == "$WP_ORG_DEPLOY_SKIP" ]]; then
+	echo "ℹ︎ WordPress.org deploy skipped due to WP_ORG_DEPLOY_SKIP variable" 1>&2
+	exit 0
 fi
 
 # Ensure certain environment variables are set
